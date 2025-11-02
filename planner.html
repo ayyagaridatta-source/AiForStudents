@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Study Planner - AI for Students</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>body{font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}</style>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-sky-50 to-indigo-100 flex items-center justify-center p-4">
+    <div class="max-w-md w-full">
+        <!-- Back to Dashboard Button -->
+        <div class="text-center mb-6">
+            <a href="dashboard.html" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 transition">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Main Card -->
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">AI Study Planner 🧠</h1>
+            
+            <!-- Study Plan Form -->
+            <form id="plannerForm" class="space-y-4">
+                <!-- Subject Input -->
+                <div>
+                    <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">
+                        Subject
+                    </label>
+                    <input type="text" id="subject" required
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                        placeholder="e.g., Mathematics">
+                </div>
+
+                <!-- Study Hours Input -->
+                <div>
+                    <label for="hours" class="block text-sm font-medium text-gray-700 mb-1">
+                        Study Hours
+                    </label>
+                    <input type="number" id="hours" required min="0.5" step="0.5"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                        placeholder="2.5">
+                </div>
+
+                <!-- Daily Goal Input -->
+                <div>
+                    <label for="goal" class="block text-sm font-medium text-gray-700 mb-1">
+                        Daily Goal
+                    </label>
+                    <textarea id="goal" required rows="3"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                        placeholder="Complete Chapter 3 exercises"></textarea>
+                </div>
+
+                <!-- Generate Button -->
+                <button type="submit" id="generateBtn"
+                    class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition duration-300">
+                    Generate Plan
+                </button>
+            </form>
+
+            <!-- Output Message Box (hidden by default) -->
+            <div id="outputBox" class="hidden mt-6">
+                <!-- Loading Indicator -->
+                <div id="loadingBox" class="hidden">
+                    <div class="flex items-center justify-center space-x-2 text-indigo-600">
+                        <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>Thinking 💭...</span>
+                    </div>
+                </div>
+
+                <!-- Plan Display -->
+                <div id="planDisplay" class="p-4 bg-gradient-to-r from-indigo-50 to-sky-50 rounded-lg border border-indigo-100">
+                    <p id="outputMessage" class="text-gray-800 whitespace-pre-line"></p>
+                    
+                    <!-- Action Buttons -->
+                    <div class="mt-4 flex gap-3">
+                        <button id="regenerateBtn" class="flex-1 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">
+                            Regenerate ↺
+                        </button>
+                        <button id="saveBtn" class="flex-1 border-2 border-indigo-600 text-indigo-600 py-2 rounded-lg hover:bg-indigo-50 transition">
+                            Save Plan 📥
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Previous Plans Section -->
+                <div id="previousPlans" class="mt-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-2">Previous Plans</h3>
+                    <div id="plansList" class="space-y-2 max-h-40 overflow-y-auto"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store for saved plans
+        let savedPlans = JSON.parse(localStorage.getItem('studyPlans') || '[]');
+
+        // Function to save plans to localStorage
+        function savePlan(plan) {
+            savedPlans.unshift({
+                id: Date.now(),
+                ...plan
+            });
+            if (savedPlans.length > 5) savedPlans.pop(); // Keep only last 5 plans
+            localStorage.setItem('studyPlans', JSON.stringify(savedPlans));
+            renderSavedPlans();
+        }
+
+        // Function to render saved plans
+        function renderSavedPlans() {
+            const plansList = document.getElementById('plansList');
+            plansList.innerHTML = savedPlans.map(plan => `
+                <div class="p-3 bg-white rounded-lg shadow-sm text-sm">
+                    <div class="font-medium">${plan.subject} - ${plan.hours} hours</div>
+                    <div class="text-gray-600 truncate">${plan.goal}</div>
+                </div>
+            `).join('');
+        }
+
+        // Generate study plan using AI
+        async function generatePlan(subject, hours, goal) {
+            const prompt = `Create a detailed study plan for ${subject} for ${hours} hours. Goal: ${goal}. 
+                          Include specific time blocks, breaks, and strategies to achieve the goal effectively.`;
+
+            try {
+                const response = await fetch('http://localhost:3001/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: prompt })
+                });
+
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+
+                const data = await response.json();
+                return data.reply;
+            } catch (error) {
+                console.error('Error:', error);
+                throw new Error('⚠️ AI is busy, try again later');
+            }
+        }
+
+        // Main form submission handler
+        document.getElementById('plannerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const subject = document.getElementById('subject').value;
+            const hours = document.getElementById('hours').value;
+            const goal = document.getElementById('goal').value;
+            const outputBox = document.getElementById('outputBox');
+            const loadingBox = document.getElementById('loadingBox');
+            const planDisplay = document.getElementById('planDisplay');
+            const outputMessage = document.getElementById('outputMessage');
+
+            // Show loading state
+            outputBox.classList.remove('hidden');
+            loadingBox.classList.remove('hidden');
+            planDisplay.classList.add('hidden');
+
+            try {
+                const plan = await generatePlan(subject, hours, goal);
+                
+                // Hide loading, show plan
+                loadingBox.classList.add('hidden');
+                planDisplay.classList.remove('hidden');
+                outputMessage.textContent = plan;
+                
+                // Add fade-in animation
+                planDisplay.classList.add('animate-fade-in');
+                
+                // Save current plan details for regeneration
+                planDisplay.dataset.subject = subject;
+                planDisplay.dataset.hours = hours;
+                planDisplay.dataset.goal = goal;
+
+            } catch (error) {
+                loadingBox.classList.add('hidden');
+                planDisplay.classList.remove('hidden');
+                outputMessage.textContent = error.message;
+            }
+        });
+
+        // Regenerate button handler
+        document.getElementById('regenerateBtn').addEventListener('click', async function() {
+            const planDisplay = document.getElementById('planDisplay');
+            const subject = planDisplay.dataset.subject;
+            const hours = planDisplay.dataset.hours;
+            const goal = planDisplay.dataset.goal;
+
+            if (subject && hours && goal) {
+                // Reuse the form submission logic
+                document.getElementById('subject').value = subject;
+                document.getElementById('hours').value = hours;
+                document.getElementById('goal').value = goal;
+                document.getElementById('plannerForm').requestSubmit();
+            }
+        });
+
+        // Save button handler
+        document.getElementById('saveBtn').addEventListener('click', function() {
+            const planDisplay = document.getElementById('planDisplay');
+            const subject = planDisplay.dataset.subject;
+            const hours = planDisplay.dataset.hours;
+            const goal = planDisplay.dataset.goal;
+            const plan = document.getElementById('outputMessage').textContent;
+
+            if (plan && subject) {
+                savePlan({ subject, hours, goal, plan });
+            }
+        });
+
+        // Initialize saved plans display
+        renderSavedPlans();
+    </script>
+</body>
+</html>
+
+<script>
+// Highlight current page links
+(function(){
+    const file = location.pathname.split('/').pop() || 'planner.html';
+    document.querySelectorAll('a[href]').forEach(a=>{ try{ const href=a.getAttribute('href'); if(!href) return; if(href===file) a.classList.add('text-indigo-600','font-semibold'); }catch(e){} });
+})();
+</script>
+</body>
+</html>

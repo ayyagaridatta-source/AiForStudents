@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Notes & Summaries - AI for Students</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-sky-50 to-indigo-100 dark:from-gray-900 dark:to-indigo-950 transition-colors duration-300">
+    <!-- Navigation Bar -->
+    <nav class="bg-white/95 backdrop-blur-sm shadow-lg dark:bg-gray-800/95">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <a href="dashboard.html" class="inline-flex items-center text-gray-800 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Dashboard
+                </a>
+                <button onclick="toggleTheme()" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition"
+                        title="Toggle dark mode">
+                    <svg class="w-6 h-6 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                    </svg>
+                    <svg class="w-6 h-6 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-white text-center mb-8">My Notes & Summaries 📚</h1>
+
+        <!-- Tabs -->
+        <div class="flex justify-center mb-6">
+            <button onclick="showTab('plans')" 
+                class="px-6 py-2 text-gray-600 dark:text-gray-300 border-b-2 border-transparent hover:text-indigo-600 dark:hover:text-indigo-400 transition"
+                id="plansTab">
+                Study Plans
+            </button>
+            <button onclick="showTab('summaries')" 
+                class="px-6 py-2 text-gray-600 dark:text-gray-300 border-b-2 border-transparent hover:text-indigo-600 dark:hover:text-indigo-400 transition"
+                id="summariesTab">
+                Note Summaries
+            </button>
+        </div>
+
+        <!-- Study Plans Section -->
+        <div id="plansSection" class="hidden space-y-4">
+            <div id="plansList" class="space-y-4">
+                <!-- Plans will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Summaries Section -->
+        <div id="summariesSection" class="hidden space-y-4">
+            <div id="summariesList" class="space-y-4">
+                <!-- Summaries will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="text-center py-12">
+            <svg class="w-16 h-16 mx-auto text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <p class="text-gray-500 dark:text-gray-400">No items yet. Create some study plans or summaries!</p>
+        </div>
+
+        <!-- Clear All Button -->
+        <div class="text-center mt-8">
+            <button onclick="clearAllData()" 
+                class="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition">
+                Clear All Data
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+        }
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Show selected tab
+        function showTab(tab) {
+            const plansSection = document.getElementById('plansSection');
+            const summariesSection = document.getElementById('summariesSection');
+            const plansTab = document.getElementById('plansTab');
+            const summariesTab = document.getElementById('summariesTab');
+            const emptyState = document.getElementById('emptyState');
+
+            // Reset all tabs
+            [plansTab, summariesTab].forEach(t => {
+                t.classList.remove('border-indigo-600', 'text-indigo-600', 'dark:text-indigo-400');
+            });
+
+            if (tab === 'plans') {
+                plansSection.classList.remove('hidden');
+                summariesSection.classList.add('hidden');
+                plansTab.classList.add('border-indigo-600', 'text-indigo-600', 'dark:text-indigo-400');
+                loadPlans();
+            } else {
+                summariesSection.classList.remove('hidden');
+                plansSection.classList.add('hidden');
+                summariesTab.classList.add('border-indigo-600', 'text-indigo-600', 'dark:text-indigo-400');
+                loadSummaries();
+            }
+        }
+
+        // Load study plans
+        function loadPlans() {
+            const plans = JSON.parse(localStorage.getItem('studyPlans') || '[]');
+            const plansList = document.getElementById('plansList');
+            const emptyState = document.getElementById('emptyState');
+
+            if (plans.length === 0) {
+                plansList.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            plansList.innerHTML = plans.map((plan, index) => `
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 animate-fade-in"
+                     style="animation-delay: ${index * 100}ms">
+                    <div class="font-semibold text-gray-800 dark:text-white mb-2">${plan.subject}</div>
+                    <div class="text-gray-600 dark:text-gray-300 text-sm">${plan.hours} hours - ${plan.goal}</div>
+                    <div class="mt-3 text-gray-700 dark:text-gray-200 whitespace-pre-line">${plan.plan}</div>
+                </div>
+            `).join('');
+        }
+
+        // Load summaries
+        function loadSummaries() {
+            const summaries = JSON.parse(localStorage.getItem('noteSummaries') || '[]');
+            const summariesList = document.getElementById('summariesList');
+            const emptyState = document.getElementById('emptyState');
+
+            if (summaries.length === 0) {
+                summariesList.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            summariesList.innerHTML = summaries.map((summary, index) => `
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 animate-fade-in"
+                     style="animation-delay: ${index * 100}ms">
+                    <div class="text-gray-700 dark:text-gray-200 whitespace-pre-line">${summary.summary}</div>
+                    <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                        Created: ${new Date(summary.date).toLocaleDateString()}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Clear only saved summaries (do NOT remove study plans)
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear all saved note summaries? This will NOT remove saved study plans.')) {
+                localStorage.removeItem('noteSummaries');
+                showTab('summaries'); // Refresh the view
+            }
+        }
+
+        // Initialize with plans tab
+        showTab('plans');
+    </script>
+</body>
+</html>

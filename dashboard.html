@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AI for Students</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>body{font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}</style>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-sky-50 to-indigo-100 dark:from-gray-900 dark:to-indigo-950 transition-colors duration-300">
+    <!-- Page Loader -->
+    <div id="pageLoader" class="transition-opacity duration-300">
+        <div class="text-center">
+            <div class="mb-4">
+                <svg class="w-16 h-16 animate-spin text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 text-lg">Loading your AI Study Dashboard...</p>
+        </div>
+    </div>
+    <!-- Navigation Bar -->
+    <nav class="bg-white/95 backdrop-blur-sm shadow-lg dark:bg-gray-800/95">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <h1 class="text-xl font-bold text-gray-800 dark:text-white">AI for Students</h1>
+                <div class="flex items-center gap-4">
+                    <!-- Quick Actions Dropdown -->
+                    <div class="relative" id="quickActionsMenu">
+                        <button onclick="toggleQuickActions()" 
+                            class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition flex items-center gap-1"
+                            title="Quick Actions | Alt+Q">
+                            <span>Quick Actions</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div id="quickActionsDropdown" 
+                            class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-50">
+                            <a href="planner.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                Study Planner (Alt+P)
+                            </a>
+                            <a href="summarizer.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                Notes Summarizer (Alt+S)
+                            </a>
+                            <a href="notes.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                My Notes (Alt+N)
+                            </a>
+                            <hr class="my-2 border-gray-200 dark:border-gray-600">
+                            <button onclick="toggleTheme()" 
+                                class="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                title="Toggle dark/light mode | Alt+D">
+                                Toggle Theme
+                            </button>
+                        </div>
+                    </div>
+                    <button onclick="window.location.href='index.html'" 
+                        class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition"
+                        title="Logout | Alt+H">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">AI for Students Dashboard</h2>
+            <p class="text-gray-600 dark:text-gray-300">Your AI Study Companion</p>
+        </div>
+        
+        <!-- Feature Cards Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <!-- AI Study Planner Card -->
+            <a href="planner.html" class="group">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition duration-300
+                            border border-transparent hover:border-indigo-500/20">
+                    <div class="text-indigo-600 dark:text-indigo-400 mb-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">AI Study Planner</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Create personalized study schedules with AI assistance.</p>
+                </div>
+            </a>
+
+            <!-- AI Notes Summarizer Card -->
+            <a href="summarizer.html" class="group">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition duration-300
+                            border border-transparent hover:border-indigo-500/20">
+                    <div class="text-indigo-600 dark:text-indigo-400 mb-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">AI Notes Summarizer</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Convert lengthy notes into concise summaries instantly.</p>
+                </div>
+            </a>
+
+            <!-- My Notes & Summaries Card -->
+            <a href="notes.html" class="group">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition duration-300
+                            border border-transparent hover:border-indigo-500/20">
+                    <div class="text-indigo-600 dark:text-indigo-400 mb-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">My Notes & Summaries</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Access your saved study plans and summaries.</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Motivational Quote Section -->
+        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-6 text-center">
+            <p id="quote" class="text-gray-700 dark:text-gray-300 italic"></p>
+            <p id="author" class="text-gray-500 dark:text-gray-400 mt-2"></p>
+            <p id="tipBox" class="text-sm text-indigo-600 dark:text-indigo-400 mt-3"></p>
+        </div>
+
+        <!-- Chat Widget -->
+        <div id="chatWidget" class="fixed right-6 bottom-6 w-80 md:w-96 bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden transition-transform duration-300 ease-in-out">
+            <div class="px-4 py-3 border-b dark:border-gray-700 flex items-center justify-between bg-gradient-to-r from-indigo-600 to-indigo-700">
+                <h4 class="font-semibold text-white flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                    Study Assistant
+                </h4>
+                <button onclick="toggleChat()" 
+                        class="text-white/80 hover:text-white transition-colors" 
+                        title="Minimize chat"
+                        aria-label="Minimize chat">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+            </div>
+            <div id="chatBox" class="p-3 max-h-[60vh] overflow-y-auto bg-gray-50 dark:bg-gray-900/60 scroll-smooth">
+                <!-- Welcome message -->
+                <div class="mb-3">
+                    <div class="inline-block max-w-[80%] p-3 rounded-lg bg-gradient-to-br from-indigo-50 to-blue-50 text-gray-800 rounded-tl-none 
+                                dark:from-indigo-900/50 dark:to-blue-900/50 dark:text-gray-200 shadow-sm">
+                        <p class="mb-2">👋 Hello! I'm your AI study assistant.</p>
+                        <p>I can help you with:</p>
+                        <ul class="mt-1 space-y-1 text-sm">
+                            <li>📚 Understanding complex topics</li>
+                            <li>✍️ Study techniques & tips</li>
+                            <li>🤔 Practice questions</li>
+                            <li>📝 Assignment guidance</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 border-t dark:border-gray-700 bg-white dark:bg-gray-800">
+                <form onsubmit="event.preventDefault(); sendMessage();" class="flex gap-2">
+                    <input id="userMessage" type="text" 
+                           placeholder="Ask a study question..." 
+                           class="flex-1 px-3 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-indigo-500 
+                                  dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
+                           autocomplete="off" />
+                    <button type="submit" 
+                            class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors
+                                   disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                        <span>Send</span>
+                        <svg class="w-4 h-4 send-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Chat Toggle Button (initially hidden) -->
+        <button id="chatToggle" onclick="toggleChat()" 
+                class="fixed right-6 bottom-6 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white p-4 
+                       rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 hidden"
+                title="Open chat assistant" aria-label="Open chat assistant">
+            <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+        }
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+
+            // Quick Actions Dropdown
+            function toggleQuickActions() {
+                const dropdown = document.getElementById('quickActionsDropdown');
+                dropdown.classList.toggle('hidden');
+            }
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                const menu = document.getElementById('quickActionsMenu');
+                const dropdown = document.getElementById('quickActionsDropdown');
+                if (!menu.contains(e.target) && !dropdown.classList.contains('hidden')) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+
+            // Stop propagation on menu clicks to prevent immediate closing
+            document.getElementById('quickActionsMenu').addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+        // Motivational Quotes
+        const quotes = [
+            {
+                text: "The only way to learn is by doing. Start small, think big.",
+                author: "- Learning Philosophy"
+            },
+            {
+                text: "Your future is created by what you do today, not tomorrow.",
+                author: "- Wisdom Quote"
+            },
+            {
+                text: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+                author: "- Winston Churchill"
+            },
+            {
+                text: "The expert in anything was once a beginner.",
+                author: "- Study Motivation"
+            },
+            {
+                text: "Education is not preparation for life; education is life itself.",
+                author: "- John Dewey"
+            }
+        ];
+
+        // Display random quote
+        function showRandomQuote() {
+            const quote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('quote').textContent = `"${quote.text}"`;
+            document.getElementById('author').textContent = quote.author;
+        }
+
+        // Initial quote
+        showRandomQuote();
+
+        // Random Study Tip Generator
+        const tips = [
+            "Study in 25-min focus sessions (Pomodoro).",
+            "Revise before sleeping to retain better.",
+            "Teach a topic to remember it better.",
+            "Use spaced repetition to master subjects.",
+            "Turn notes into flashcards for quick review.",
+            "Practice active recall instead of rereading."
+        ];
+
+        function showRandomTip() {
+            const tip = tips[Math.floor(Math.random() * tips.length)];
+            const tipBox = document.getElementById('tipBox');
+            if (tipBox) tipBox.textContent = tip;
+        }
+
+        showRandomTip();
+        setInterval(showRandomTip, 30000); // update every 30s
+
+        // Change quote every 60 seconds
+        setInterval(showRandomQuote, 60000);
+
+        // Page Loader
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('pageLoader');
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 300);
+        });
+
+        // Add title to theme toggle button for accessibility
+        document.querySelector('button[onclick="toggleTheme()"]').setAttribute('title', 'Toggle dark/light mode');
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Alt + D: Toggle dark mode
+            if (e.altKey && e.key === 'd') {
+                e.preventDefault();
+                toggleTheme();
+            }
+            // Alt + H: Go home
+            if (e.altKey && e.key === 'h') {
+                e.preventDefault();
+                window.location.href = 'index.html';
+            }
+            // Alt + P: Go to planner
+            if (e.altKey && e.key === 'p') {
+                e.preventDefault();
+                window.location.href = 'planner.html';
+            }
+            // Alt + S: Go to summarizer
+            if (e.altKey && e.key === 's') {
+                e.preventDefault();
+                window.location.href = 'summarizer.html';
+            }
+            // Alt + N: Go to notes
+            if (e.altKey && e.key === 'n') {
+                e.preventDefault();
+                window.location.href = 'notes.html';
+                }
+                // Alt + Q: Toggle Quick Actions
+                if (e.altKey && e.key === 'q') {
+                    e.preventDefault();
+                    toggleQuickActions();
+            }
+        });
+
+        // Add keyboard shortcut hints to tooltips
+        document.querySelectorAll('a[href], button').forEach(el => {
+            if (el.title) {
+                el.title += ' | ';
+            }
+        });
+            // Add keyboard shortcuts to tooltips
+    </script>
+    <footer class="text-center py-4 text-gray-700 dark:text-gray-300">
+        © 2025 AI for Students
+    </footer>
+
+    <script>
+    // Highlight current page links (nav/back links)
+    (function(){
+      const file = location.pathname.split('/').pop() || 'dashboard.html';
+      document.querySelectorAll('a[href]').forEach(a=>{
+        const href = a.getAttribute('href'); if(!href) return; if(href === file || href.endsWith('/'+file)) a.classList.add('text-indigo-600','font-semibold');
+      });
+    })();
+    </script>
+</body>
+</html>
+
+    <script>
+        // Chat Widget State
+        let isChatVisible = true;
+        let isProcessing = false;
+        const MAX_MESSAGE_LENGTH = 2000; // Token limit safety
+        const TYPING_SPEED = 20; // ms per character for typing effect
+
+        function toggleChat() {
+            const chatWidget = document.getElementById('chatWidget');
+            const chatToggle = document.getElementById('chatToggle');
+            
+            isChatVisible = !isChatVisible;
+            
+            if (isChatVisible) {
+                chatToggle.style.display = 'none';
+                chatWidget.style.transform = 'scale(0.95)';
+                chatWidget.style.display = 'block';
+                // Animate in
+                setTimeout(() => {
+                    chatWidget.style.transform = 'scale(1)';
+                }, 10);
+            } else {
+                chatWidget.style.transform = 'scale(0.95)';
+                // Animate out
+                setTimeout(() => {
+                    chatWidget.style.display = 'none';
+                    chatToggle.style.display = 'block';
+                }, 300);
+            }
+        }
+
+        // Message queue for long conversations
+        const messageQueue = [];
+        let isProcessingQueue = false;
+
+        // Process messages in queue
+        async function processMessageQueue() {
+            if (isProcessingQueue || messageQueue.length === 0) return;
+            
+            isProcessingQueue = true;
+            
+            while (messageQueue.length > 0) {
+                const nextMessage = messageQueue[0];
+                try {
+                    await processMessage(nextMessage);
+                    messageQueue.shift(); // Remove processed message
+                } catch (error) {
+                    console.error('Error processing message:', error);
+                    addChatMessage('Sorry, there was an error. Please try again.', 'bot');
+                    messageQueue.length = 0; // Clear queue on error
+                    break;
+                }
+            }
+            
+            isProcessingQueue = false;
+        }
+
+        // Process individual message
+        async function processMessage(message) {
+            try {
+                const response = await fetch("http://localhost:3001/api/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        message: message.substring(0, MAX_MESSAGE_LENGTH) // Prevent token limit issues
+                    })
+                });
+
+                if (!response.ok) {
+                    if (response.status === 429) {
+                        throw new Error('Rate limit exceeded. Please wait a moment.');
+                    }
+                    throw new Error('API request failed');
+                }
+
+                const data = await response.json();
+                if (!data.reply) {
+                    throw new Error('Invalid response format');
+                }
+
+                return data.reply;
+            } catch (error) {
+                throw error;
+            }
+        }
+
+        // Chatbot functionality
+        async function sendMessage() {
+            const input = document.getElementById('userMessage');
+            if (!input || isProcessing) return;
+            
+            const message = input.value.trim();
+            if (!message) return;
+            
+            isProcessing = true;
+
+            try {
+                // Add user message to display
+                addChatMessage(message, 'user');
+                input.value = '';
+
+                // Show thinking indicator
+                addChatMessage('Thinking...', 'bot', 'thinking');
+
+                // Split long messages
+                if (message.length > MAX_MESSAGE_LENGTH) {
+                    const chunks = message.match(new RegExp(`.{1,${MAX_MESSAGE_LENGTH}}`, 'g')) || [];
+                    messageQueue.push(...chunks);
+                } else {
+                    messageQueue.push(message);
+                }
+
+                // Process queue
+                for (const msg of messageQueue) {
+                    const reply = await processMessage(msg);
+                    document.querySelector('.thinking')?.remove();
+                    addChatMessage(reply, 'bot');
+                }
+
+                messageQueue.length = 0; // Clear queue after successful processing
+            } catch (error) {
+                console.error('Chat error:', error);
+                document.querySelector('.thinking')?.remove();
+                
+                let errorMessage = 'Sorry, something went wrong. Please try again.';
+                if (error.message.includes('Rate limit')) {
+                    errorMessage = 'Please wait a moment before sending another message.';
+                } else if (error.message.includes('API request failed')) {
+                    errorMessage = 'Unable to connect to the AI. Please check your connection.';
+                }
+                
+                addChatMessage(errorMessage, 'bot', 'error');
+            } finally {
+                isProcessing = false;
+            }
+            async function addChatMessage(message, sender, className = '') {
+                const chatBox = document.getElementById('chatBox');
+                if (!chatBox) { console.warn('addChatMessage: #chatBox not found'); return; }
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `mb-3 opacity-0 transform translate-y-2 ${className} ${sender === 'user' ? 'text-right' : ''}`;
+                
+                const bubble = document.createElement('div');
+                bubble.className = `inline-block max-w-[80%] p-3 rounded-lg ${
+                    sender === 'user' 
+                        ? 'bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-tr-none shadow-md' 
+                        : className === 'error'
+                        ? 'bg-gradient-to-r from-red-50 to-red-100 text-red-600 rounded-tl-none dark:from-red-900/50 dark:to-red-800/50 dark:text-red-400 shadow-md'
+                        : className === 'thinking'
+                        ? 'bg-gray-100 text-gray-600 rounded-tl-none dark:bg-gray-800 dark:text-gray-400 animate-pulse'
+                        : 'bg-gradient-to-br from-gray-100 to-blue-50 text-gray-800 rounded-tl-none dark:from-gray-800 dark:to-gray-700 dark:text-gray-200 shadow-md'
+                }`;
+
+                // Add typing effect for bot messages
+                if (sender !== 'user' && className !== 'thinking') {
+                    bubble.textContent = '';
+                    messageDiv.style.transition = 'all 0.3s ease-out';
+                    messageDiv.style.opacity = '1';
+                    messageDiv.style.transform = 'translateY(0)';
+                    
+                    let i = 0;
+                    const typeWriter = () => {
+                        if (i < message.length) {
+                            bubble.textContent += message.charAt(i);
+                            i++;
+                            setTimeout(typeWriter, TYPING_SPEED);
+                        }
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    };
+                    typeWriter();
+                } else {
+                bubble.textContent = message;
+                // Animate in
+                setTimeout(() => {
+                    messageDiv.style.transition = 'all 0.3s ease-out';
+                    messageDiv.style.opacity = '1';
+                    messageDiv.style.transform = 'translateY(0)';
+                }, 10);
+                }
+                
+                messageDiv.appendChild(bubble);
+                chatBox.appendChild(messageDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;                messageDiv.appendChild(bubble);
+                chatBox.appendChild(messageDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        }
+
+        function addChatMessage(message, sender, className = '') {
+            const chatBox = document.getElementById('chatBox');
+            if (!chatBox) { console.warn('addChatMessage: #chatBox not found'); return; }
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `mb-3 ${className} ${sender === 'user' ? 'text-right' : ''}`;
+            
+            const bubble = document.createElement('div');
+            bubble.className = `inline-block max-w-[80%] p-3 rounded-lg ${
+                sender === 'user' 
+                    ? 'bg-indigo-600 text-white rounded-tr-none' 
+                    : 'bg-gray-100 text-gray-800 rounded-tl-none'
+            }`;
+            bubble.textContent = message;
+            
+            messageDiv.appendChild(bubble);
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Task Organizer functionality
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+        function updateTaskCounter() {
+            const pending = tasks.filter(task => !task.completed).length;
+            document.getElementById('taskCounter').textContent = `${pending} tasks pending`;
+        }
+
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            updateTaskCounter();
+        }
+
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            const taskText = input.value.trim();
+            if (!taskText) return;
+
+            tasks.push({
+                id: Date.now(),
+                text: taskText,
+                completed: false
+            });
+
+            input.value = '';
+            renderTasks();
+            saveTasks();
+        }
+
+        function toggleTask(id) {
+            tasks = tasks.map(task => 
+                task.id === id ? {...task, completed: !task.completed} : task
+            );
+            renderTasks();
+            saveTasks();
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(task => task.id !== id);
+            renderTasks();
+            saveTasks();
+        }
+
+        function clearAllTasks() {
+            if (confirm('Are you sure you want to delete all tasks?')) {
+                tasks = [];
+                renderTasks();
+                saveTasks();
+            }
+        }
+
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+
+            tasks.forEach((task, index) => {
+                const taskDiv = document.createElement('div');
+                taskDiv.className = `flex items-center justify-between p-3 rounded-lg ${
+                    index % 2 === 0 ? 'bg-gray-50' : 'bg-white'
+                }`;
+
+                const textSpan = document.createElement('span');
+                textSpan.className = task.completed ? 'line-through text-gray-500' : '';
+                textSpan.textContent = task.text;
+
+                const buttonsDiv = document.createElement('div');
+                buttonsDiv.className = 'flex gap-2';
+
+                const toggleButton = document.createElement('button');
+                toggleButton.className = `px-3 py-1 rounded ${
+                    task.completed 
+                        ? 'bg-green-500 text-white' 
+                        : 'bg-gray-200 text-gray-700'
+                } hover:opacity-80 transition`;
+                toggleButton.textContent = task.completed ? 'Done' : 'Mark Done';
+                toggleButton.onclick = () => toggleTask(task.id);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600 transition';
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => deleteTask(task.id);
+
+                buttonsDiv.appendChild(toggleButton);
+                buttonsDiv.appendChild(deleteButton);
+
+                taskDiv.appendChild(textSpan);
+                taskDiv.appendChild(buttonsDiv);
+                taskList.appendChild(taskDiv);
+            });
+        }
+
+        // Initialize tasks on page load
+        renderTasks();
+        updateTaskCounter();
+
+        // Add Enter key support for both chat and tasks (guarded)
+        const _userMessageEl = document.getElementById('userMessage');
+        if (_userMessageEl) {
+            _userMessageEl.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+        }
+
+        const _taskInputEl = document.getElementById('taskInput');
+        if (_taskInputEl) {
+            _taskInputEl.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addTask();
+            });
+        }
+    </script>
+</body>
+</html>
