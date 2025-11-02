@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI for Students - Your personal AI-powered study dashboard">
+    
+    <!-- PWA & Theme Settings -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="AI for Students">
+    
+    <!-- iOS specific -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AI for Students">
+    
+    <!-- Windows specific -->
+    <meta name="msapplication-TileColor" content="#4F46E5">
+    <meta name="msapplication-TileImage" content="favicon.svg">
+    <meta name="msapplication-config" content="browserconfig.xml">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="favicon.svg">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <title>AI for Students - Dashboard</title>
+</head>
+<body>
+    <!-- Offline Message -->
+    <div class="offline-msg">
+        You're offline. Some features may be unavailable.
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel">
+        <h2>Settings</h2>
+        <div class="settings-group">
+            <h3><label for="theme-select">Theme</label></h3>
+            <select id="theme-select" name="theme" onchange="updateSettings('theme', this.value)" aria-label="Select theme">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+            </select>
+        </div>
+        <div class="settings-group">
+            <h3><label for="model-select">AI Model</label></h3>
+            <select id="model-select" name="aiModel" onchange="updateSettings('aiModel', this.value)" aria-label="Select AI model">
+                <option value="gemini">Gemini</option>
+                <option value="gpt">GPT</option>
+            </select>
+        </div>
+        <div class="settings-group">
+            <h3><label for="font-select">Font Size</label></h3>
+            <select id="font-select" name="fontSize" onchange="updateSettings('fontSize', this.value)" aria-label="Select font size">
+                <option value="small">Small</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+            </select>
+        </div>
+        <button class="btn btn-warning" onclick="resetAllData()">
+            Reset All Data
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="welcome-msg"></div>
+            <div class="date"></div>
+            <div class="quote"></div>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid"></div>
+
+        <!-- Quick Actions -->
+        <section class="card">
+            <h2>Quick Actions</h2>
+            <div class="actions-grid">
+                <a href="chat.html" class="action-btn">
+                    <i class="material-icons">chat</i>
+                    AI Chat
+                </a>
+                <a href="todo.html" class="action-btn">
+                    <i class="material-icons">check_circle</i>
+                    To-Do List
+                </a>
+                <a href="notes.html" class="action-btn">
+                    <i class="material-icons">note</i>
+                    Notes
+                </a>
+                <a href="planner.html" class="action-btn">
+                    <i class="material-icons">calendar_today</i>
+                    Planner
+                </a>
+                <a href="summarizer.html" class="action-btn">
+                    <i class="material-icons">summarize</i>
+                    Summarizer
+                </a>
+            </div>
+        </section>
+
+        <!-- AI Study Helper -->
+        <section class="card">
+            <h2>AI Study Helper</h2>
+            <div class="form-group">
+                <input type="text" id="topic" placeholder="Enter a topic (e.g., photosynthesis)">
+                <button onclick="explainTopic(document.getElementById('topic').value)" class="btn btn-primary api-dependent">
+                    <i class="material-icons">psychology</i>
+                    Explain Topic
+                </button>
+            </div>
+            <div class="explanation output"></div>
+        </section>
+    </div>
+
+    <!-- Voice Assistant Button -->
+    <button class="voice-btn" aria-label="Voice Assistant">
+        <i class="material-icons">mic</i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="script.js" defer></script>
+</body>
+</html>
